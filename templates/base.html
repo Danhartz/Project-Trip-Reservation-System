@@ -1,1 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Trip Reservation System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        nav a, nav form button {
+            margin-right: 12px;
+            display: inline-block;
+        }
+        nav {
+            margin-bottom: 15px;
+        }
+        .flash {
+            padding: 8px 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .flash-error { background-color: #ffe0e0; }
+        .flash-message { background-color: #e0f4ff; }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 4px 8px;
+            text-align: center;
+        }
+        .taken {
+            background-color: #f8c4c4;
+        }
+        .available {
+            background-color: #c9f5c9;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="{{ url_for('menu') }}">Main Menu</a>
+    <a href="{{ url_for('reserve') }}">Reserve Seat</a>
+    <a href="{{ url_for('admin_login') }}">Admin Login</a>
+
+    {% if session.get('admin_logged_in') %}
+        <a href="{{ url_for('admin_portal') }}">Admin Dashboard</a>
+        <form action="{{ url_for('admin_logout') }}" method="post" style="display:inline;">
+            <button type="submit">Logout</button>
+        </form>
+    {% endif %}
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=false) %}
+  {% if messages %}
+    {% for msg in messages %}
+      <div class="flash flash-message">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<hr>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>
 

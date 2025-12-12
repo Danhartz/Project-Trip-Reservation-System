@@ -1,1 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Trip Reservation System</h1>
+
+<p>Please choose an option:</p>
+<ul>
+    <li><a href="{{ url_for('reserve') }}">Reserve a Seat</a></li>
+    <li><a href="{{ url_for('admin_login') }}">Admin Login</a></li>
+</ul>
+{% endblock %}
 

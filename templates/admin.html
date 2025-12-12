@@ -1,1 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<h3>Total Sales</h3>
+<p><strong>${{ "%.2f"|format(sales) }}</strong></p>
+
+<hr>
+
+<h3>Bus Seating Chart</h3>
+<table>
+    <tr>
+        <th>Row \ Col</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+    </tr>
+
+    {% for row_index, row in enumerate(chart) %}
+    <tr>
+        <th>{{ row_index + 1 }}</th>
+        {% for col_index, seat in enumerate(row) %}
+        {% set price = prices[row_index][col_index] %}
+        <td class="{{ 'taken' if seat.taken else 'available' }}">
+            Row {{ row_index + 1 }}, Col {{ col_index + 1 }}<br>
+            ${{ price }}<br>
+            {% if seat.taken %}
+                <strong>Reserved</strong><br>
+                Code: {{ seat.code }}
+            {% else %}
+                <strong>Available</strong>
+            {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<h3>Reservations List</h3>
+{% if reservations %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Passenger</th>
+        <th>Seat</th>
+        <th>eTicket</th>
+        <th>Created</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in reservations %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.passengerName }}</td>
+        <td>Row {{ r.seatRow }}, Col {{ r.seatColumn }}</td>
+        <td>{{ r.eTicketNumber }}</td>
+        <td>{{ r.created }}</td>
+        <td>
+            <form action="{{ url_for('admin_delete', rid=r.id) }}" method="post"
+                  onsubmit="return confirm('Delete this reservation?');">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No reservations yet.</p>
+{% endif %}
+
+{% endblock %}
 

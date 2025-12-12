@@ -1,1 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Reserve a Seat</h2>
+
+<form method="post">
+    <label>
+        Passenger Name:
+        <input type="text" name="passengerName" required>
+    </label>
+    <br><br>
+
+    <label>
+        Seat Row (1–12):
+        <input type="number" name="seatRow" min="1" max="12" required>
+    </label>
+    <br><br>
+
+    <label>
+        Seat Column (1–4):
+        <input type="number" name="seatColumn" min="1" max="4" required>
+    </label>
+    <br><br>
+
+    <button type="submit">Reserve Seat</button>
+</form>
+
+<h3>Bus Seating Chart</h3>
+<p><em>Green = available, Red = taken. Prices are per seat.</em></p>
+
+<table>
+    <tr>
+        <th>Row \ Col</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+    </tr>
+
+    {% for row_index, row in enumerate(chart) %}
+    <tr>
+        <th>{{ row_index + 1 }}</th>
+        {% for col_index, seat in enumerate(row) %}
+        {% set price = prices[row_index][col_index] %}
+        <td class="{{ 'taken' if seat.taken else 'available' }}">
+            Row {{ row_index + 1 }}, Col {{ col_index + 1 }}<br>
+            ${{ price }}<br>
+            {% if seat.taken %}
+                <strong>Reserved</strong><br>
+                Code: {{ seat.code }}
+            {% else %}
+                <strong>Available</strong>
+            {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
 
